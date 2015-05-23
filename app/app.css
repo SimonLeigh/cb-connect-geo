@@ -1,0 +1,21 @@
+/* app css stylesheet */
+
+
+
+.angular-google-map-container {
+  height: 600px;
+}
+
+/* fix for Twitter Bootstrap handling of responsive images */
+.angular-google-map img {
+  max-width: none;
+}
+
+.angular-google-map {
+  top: 5px;
+
+}
+.angular-google-map {
+  display: block;
+}
+

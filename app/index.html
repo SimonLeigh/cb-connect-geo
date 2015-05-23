@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" id='ng-app' ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My AngularJS App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,600,300,700'
+          rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="app.css">
+    <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body ng-controller="myAppCtrl">
+<!--
+<ul class="menu">
+  <li><a href="#/view1">view1</a></li>
+  <li><a href="#/view2">view2</a></li>
+</ul>
+-->
+<div class="container">
+
+    <div class="row">
+        <div class="page-title">
+            <h2>angular-google-maps: <span ng-cloak>{{version}}</span>, google-maps: <span ng-cloak>{{googleVersion}}</span></h2>
+        </div>
+        <button class="btn btn-danger" ng-click="removeMarkers()">Clear Map</button>
+        <button class="btn btn-success" ng-click="refreshMap()">Refresh Map</button>
+        <button class="btn btn-success" ng-click="getMapInstance()">Get Map Instance</button>
+        Show Map: <input type="checkbox" text="Show / Hide Map" ng-model="map.show">
+    </div>
+
+    <div class="row" ng-if="map.show">
+        <ui-gmap-google-map class="col-md-8"
+                            center="map.center"
+                            zoom="map.zoom"
+                            dragging="map.dragging"
+                            bounds="map.bounds"
+                            events="map.events"
+                            options="map.options"
+                            pan="true"
+                            control="map.control"
+                >
+        </ui-gmap-google-map>
+        <div class="col-md-4">
+            <fieldset>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>center</td>
+                        <td>
+                    <pre ng-cloak>
+                        <span ng-show="map.center.latitude >= 0">&nbsp;
+                        </span>
+                        {{ map.center.latitude | number:4 }} lat
+                        <br>
+                        <span ng-show="map.center.longitude >= 0">&nbsp;
+                        </span>{{ map.center.longitude | number:4 }} lng
+                    </pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>zoom</td>
+                        <td>{{ map.zoom }}</td>
+                    </tr>
+                    <tr>
+                        <td>bounds</td>
+                        <td>
+                    <pre ng-cloak>
+                        north-east: {{ map.bounds.northeast.latitude | number:4 }},{{ map.bounds.northeast.longitude | number:4 }}
+                        <br>
+                        south-west: {{ map.bounds.southwest.latitude | number:4 }},{{ map.bounds.southwest.longitude | number:4 }}
+                    </pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>dragging</td>
+                        <td ng-cloak>{{ map.dragging }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<div>Angular seed app: v<span app-version></span></div>
+
+<!-- In production use:
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+-->
+<script src='bower_components/lodash/dist/lodash.underscore.js'></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src='bower_components/angular-google-maps/dist/angular-google-maps.js'></script>
+<!--
+<script src="view1/view1.js"></script>
+<script src="view2/view2.js"></script>
+-->
+<script src="components/version/version.js"></script>
+<script src="components/version/version-directive.js"></script>
+<script src="components/version/interpolate-filter.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
