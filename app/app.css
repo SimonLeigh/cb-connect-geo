@@ -1,7 +1,5 @@
 /* app css stylesheet */
 
-
-
 .angular-google-map-container {
   height: 600px;
 }
@@ -12,10 +10,11 @@
 }
 
 .angular-google-map {
-  top: 5px;
+  padding: 20px;
 
 }
 .angular-google-map {
   display: block;
 }
+
 

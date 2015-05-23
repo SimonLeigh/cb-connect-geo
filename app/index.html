@@ -50,31 +50,24 @@
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td>center</td>
-                        <td>
-                    <pre ng-cloak>
-                        <span ng-show="map.center.latitude >= 0">&nbsp;
-                        </span>
-                        {{ map.center.latitude | number:4 }} lat
-                        <br>
-                        <span ng-show="map.center.longitude >= 0">&nbsp;
-                        </span>{{ map.center.longitude | number:4 }} lng
-                    </pre>
-                        </td>
+                        <td>lat</td>
+                        <td>{{ map.center.latitude | number:4 }}</td>
+                    </tr>
+                    <tr>
+                        <td>lon</td>
+                        <td>{{ map.center.longitude | number:4 }}</td>
                     </tr>
                     <tr>
                         <td>zoom</td>
                         <td>{{ map.zoom }}</td>
                     </tr>
                     <tr>
-                        <td>bounds</td>
-                        <td>
-                    <pre ng-cloak>
-                        north-east: {{ map.bounds.northeast.latitude | number:4 }},{{ map.bounds.northeast.longitude | number:4 }}
-                        <br>
-                        south-west: {{ map.bounds.southwest.latitude | number:4 }},{{ map.bounds.southwest.longitude | number:4 }}
-                    </pre>
-                        </td>
+                        <td>nort-east bound</td>
+                        <td>{{ map.bounds.northeast.latitude | number:4 }}, {{ map.bounds.northeast.longitude | number:4 }}</td>
+                    </tr>
+                    <tr>
+                        <td>south-west bound</TD>
+                        <td>{{ map.bounds.southwest.latitude | number:4 }}, {{ map.bounds.southwest.longitude | number:4 }}</td>
                     </tr>
                     <tr>
                         <td>dragging</td>
@@ -84,10 +77,43 @@
                 </table>
             </fieldset>
         </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-primary" id="event-table" ng-show="!empty">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Events in Area</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Transport</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in rowCollectionLeave">
+                                <td>{{row.name}}</td>
+                                <td>{{row.section}}</td>
+                                <td>{{row.price}}</td>
+                                <td>{{row.transportInfo}}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" ng-click="selectRow(row)" type="button">Choose</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div>Angular seed app: v<span app-version></span></div>
 
 <!-- In production use:
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
