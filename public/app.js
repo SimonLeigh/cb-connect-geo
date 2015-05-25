@@ -35,12 +35,12 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
                     //optional param if you want to refresh you can pass null undefined or false or empty arg
                     $scope.map.control.refresh({latitude: 51.5227, longitude: -0.0845});
                     $scope.map.control.getGMap().setZoom(16);
-                    return;
+
                 };
 
                 $scope.getMapInstance = function () {
                     alert("You have Map Instance of" + $scope.map.control.getGMap().toString());
-                    return;
+
                 };
 
                 $scope.findEvents=function() {
@@ -70,7 +70,7 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
                             }
                         });
                     }
-                }
+                };
 
                 var createMarkerFromRow = function (row, j) {
 
@@ -94,7 +94,9 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
                     //window.alert("Marker: lat: " + marker.latitude + ", lon: " + marker.longitude + " clicked!!")
                 };
 
-
+                $scope.removeMarkers = function () {
+                    $scope.map.eventMarkers = [];
+                };
 
                 angular.extend($scope, {
                     map: {
