@@ -167,7 +167,7 @@ function spatialQuery(coordinates, done){
     }
     else {
         // Set the query with BBOX coordinates and limit of 30 results for testing
-        sQuery.bbox(coordinates).limit(30);
+        sQuery.bbox(coordinates).limit(100);
         db.query(sQuery,function(err,result){
             if (err) {
                 console.log("ERR:",err);

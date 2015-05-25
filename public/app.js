@@ -20,14 +20,81 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
         };
     })
 
-    .controller("myAppCtrl", ['$scope','$http','uiGmapGoogleMapApi'
-        , function($scope, $http, GoogleMapApi) {
+    .controller("myAppCtrl", ['$scope','$timeout','$http','uiGmapGoogleMapApi'
+        , function($scope, $timeout, $http, GoogleMapApi) {
             $scope.rowCollection=[];
+
 
             // Do this here to ensure that the maps API is loaded before we do anything else
             GoogleMapApi.then(function(maps) {
                 $scope.googleVersion = maps.version;
                 maps.visualRefresh = true;
+
+
+                $scope.refreshMap = function () {
+                    //optional param if you want to refresh you can pass null undefined or false or empty arg
+                    $scope.map.control.refresh({latitude: 51.5227, longitude: -0.0845});
+                    $scope.map.control.getGMap().setZoom(16);
+                    return;
+                };
+
+                $scope.getMapInstance = function () {
+                    alert("You have Map Instance of" + $scope.map.control.getGMap().toString());
+                    return;
+                };
+
+                $scope.findEvents=function() {
+                    if ($scope.map.bounds) {
+                        $scope.rowCollection = [];
+                        $scope.map.eventMarkers = [];
+                        return $http.get("/api/events/findEvents", {
+                            params: {
+                                ne_lat: $scope.map.bounds.northeast.latitude,
+                                ne_lon: $scope.map.bounds.northeast.longitude,
+                                sw_lat: $scope.map.bounds.southwest.latitude,
+                                sw_lon: $scope.map.bounds.southwest.longitude
+                            }
+                        }).then(function (response) {
+                            var markers = [];
+                            if (response.data.length > 0) {
+                                $scope.empty = false;
+                            }
+                            for (var j = 0; j < response.data.length; j++) {
+                                $scope.rowCollection.push(response.data[j]);
+                                markers.push(
+                                    createMarkerFromRow(response.data[j],j)
+                                );
+                            }
+                            if (!$scope.empty) {
+                                $scope.map.eventMarkers = markers;
+                            }
+                        });
+                    }
+                }
+
+                var createMarkerFromRow = function (row, j) {
+
+                    // Extract location from key
+                    var latitude = row.key[1][0];
+                    var longitude = row.key[0][0];
+                    var ret = {
+                        latitude: latitude,
+                        longitude: longitude,
+                        title: row.value.name,
+                        id: row.id,
+                        data: row
+                    };
+                    console.log(ret);
+                    return ret;
+                };
+
+                var onMarkerClicked = function (marker) {
+                    marker.showWindow = true;
+                    $scope.$apply();
+                    //window.alert("Marker: lat: " + marker.latitude + ", lon: " + marker.longitude + " clicked!!")
+                };
+
+
 
                 angular.extend($scope, {
                     map: {
@@ -49,50 +116,30 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
                         },
                         zoom: 3,
                         dragging: false,
-                        bounds: {}
+                        bounds: {},
+                        eventMarkers: [],
+                        events:{
+                            dragend: function () {
+                                $timeout(function () {
+                                    var markers = [];
+                                    $scope.findEvents();
+                                });
+                            }
+                        },
                     }
                 });
 
-                $scope.refreshMap = function () {
-                    //optional param if you want to refresh you can pass null undefined or false or empty arg
-                    $scope.map.control.refresh({latitude: 51.5227, longitude: -0.0845});
-                    $scope.map.control.getGMap().setZoom(16);
-                    return;
-                };
-
-                $scope.getMapInstance = function () {
-                    alert("You have Map Instance of" + $scope.map.control.getGMap().toString());
-                    return;
-                };
-
-                $scope.findEvents=function(){
-                    $scope.rowCollection = [];
-                    return $http.get("/api/events/findEvents",{
-                        params:{
-                            ne_lat: $scope.map.bounds.northeast.latitude,
-                            ne_lon: $scope.map.bounds.northeast.longitude,
-                            sw_lat: $scope.map.bounds.southwest.latitude,
-                            sw_lon: $scope.map.bounds.southwest.longitude
-                        }
-                    }).then(function(response){
-                        if (response.data.length > 0) {
-                            $scope.empty = false;
-                        }
-                        for (var j = 0; j < response.data.length; j++) {
-                            $scope.rowCollection.push(response.data[j]);
-                        }
-                    });
-                }
-
-
-                var versionUrl = (window.location.host === "rawgithub.com" || window.location.host === "rawgit.com") ?
-                    "../package.json" : "/package.json";
-
-                $http.get(versionUrl).success(function (data) {
-                    if (!data)
-                        console.error("no version object found!!");
-                    $scope.version = data.version;
+                // Get rid of window if clicked twice.
+                $scope.map.eventMarkers.forEach( function (marker) {
+                    marker.onClicked = function () {
+                        onMarkerClicked(marker);
+                    };
+                    marker.closeClick = function () {
+                        marker.showWindow = false;
+                        $scope.$evalAsync();
+                    };
                 });
+
             });
 
         }]);

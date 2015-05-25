@@ -44,6 +44,20 @@
                             pan="true"
                             control="map.control"
                 >
+
+            <ui-gmap-markers models="map.eventMarkers" coords="'self'" icon="'icon'"
+                             click="onMarkerClicked" modelsbyref="true" idkey="map.eventMarkers.id">
+                <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
+                    <div>
+                        <p ng-non-bindable><b>Venue</b>: {{data.value.venue}}</p>
+                        <p ng-non-bindable><b>Event</b>: {{data.value.name}}</p>
+                        <p ng-non-bindable><b>When</b>: {{data.value.showtimes}}</p>
+                        <p ng-non-bindable><b>Price</b>: {{data.value.price}}</p>
+                        <p ng-non-bindable><b>Description:</b> {{data.value.annotation}}</b></p>
+                    </div>
+                </ui-gmap-windows>
+            </ui-gmap-markers>
+
         </ui-gmap-google-map>
         <div class="col-md-4" id="statsElem">
             <fieldset>
@@ -101,9 +115,6 @@
                                 <td>{{row.value.type}}</td>
                                 <td>{{row.value.price}}</td>
                                 <td>{{row.value.transport}}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" ng-click="selectRow(row)" type="button">Choose</button>
-                                </td>
                             </tr>
                             </tbody>
                         </table>
