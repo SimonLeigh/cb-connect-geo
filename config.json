@@ -1,0 +1,23 @@
+{
+  "couchbase":{
+    "endPoint":"192.168.109.101:8091",
+    "n1qlService":"192.168.109.101:8093",
+    "hostName":"192.168.109.101",
+    "bucket":"CouchPlaces",
+    "user":"Administrator",
+    "password":"password",
+    "dataPath":"",
+    "indexPath":"",
+    "indexType":"gsi",
+    "showQuery":true,
+    "indexMemQuota":2048,
+    "dataMemQuota":1024
+  },
+  "application":{
+    "httpPort":3000,
+    "dataSource":"embedded",
+    "wait":3000,
+    "checkInterval":1000,
+    "verbose":false
+  }
+}

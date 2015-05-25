@@ -13,6 +13,12 @@
     "shelljs": "^0.2.6",
     "karma-junit-reporter": "^0.2.2"
   },
+  "dependencies": {
+      "express": "*",
+      "couchbase": "*",
+      "body-parser": "*",
+      "request": "*"
+  },
   "scripts": {
     "postinstall": "bower install",
 

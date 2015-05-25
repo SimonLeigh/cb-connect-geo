@@ -22,6 +22,7 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
 
     .controller("myAppCtrl", ['$scope','$http','uiGmapGoogleMapApi'
         , function($scope, $http, GoogleMapApi) {
+            $scope.rowCollection=[];
 
             // Do this here to ensure that the maps API is loaded before we do anything else
             GoogleMapApi.then(function(maps) {
@@ -65,15 +66,21 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
                 };
 
                 $scope.findEvents=function(){
+                    $scope.rowCollection = [];
                     return $http.get("/api/events/findEvents",{
                         params:{
-                            ne_lat: map.bounds.northeast.latitude,
-                            ne_lon: map.bounds.northeast.longitude,
-                            sw_lat: map.bounds.southwest.latitude,
-                            sw_lon: map.bounds.southwest.longitude
+                            ne_lat: $scope.map.bounds.northeast.latitude,
+                            ne_lon: $scope.map.bounds.northeast.longitude,
+                            sw_lat: $scope.map.bounds.southwest.latitude,
+                            sw_lon: $scope.map.bounds.southwest.longitude
                         }
                     }).then(function(response){
-                        return response.data;
+                        if (response.data.length > 0) {
+                            $scope.empty = false;
+                        }
+                        for (var j = 0; j < response.data.length; j++) {
+                            $scope.rowCollection.push(response.data[j]);
+                        }
                     });
                 }
 

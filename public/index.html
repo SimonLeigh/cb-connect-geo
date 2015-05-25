@@ -21,7 +21,7 @@
   <li><a href="#/view2">view2</a></li>
 </ul>
 -->
-<div class="container">
+<div class="container" id="containerElem">
 
     <div class="row">
         <div class="page-title">
@@ -29,7 +29,7 @@
         </div>
         <button class="btn btn-danger" ng-click="removeMarkers()">Clear Map</button>
         <button class="btn btn-success" ng-click="refreshMap()">Refresh Map</button>
-        <button class="btn btn-success" ng-click="getMapInstance()">Get Map Instance</button>
+        <button class="btn btn-success" ng-click="findEvents()">Get Events</button>
         Show Map: <input type="checkbox" text="Show / Hide Map" ng-model="map.show">
     </div>
 
@@ -45,16 +45,16 @@
                             control="map.control"
                 >
         </ui-gmap-google-map>
-        <div class="col-md-4">
+        <div class="col-md-4" id="statsElem">
             <fieldset>
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td>lat</td>
+                        <td>center lat</td>
                         <td>{{ map.center.latitude | number:4 }}</td>
                     </tr>
                     <tr>
-                        <td>lon</td>
+                        <td>center lon</td>
                         <td>{{ map.center.longitude | number:4 }}</td>
                     </tr>
                     <tr>
@@ -62,7 +62,7 @@
                         <td>{{ map.zoom }}</td>
                     </tr>
                     <tr>
-                        <td>nort-east bound</td>
+                        <td>north-east bound</td>
                         <td>{{ map.bounds.northeast.latitude | number:4 }}, {{ map.bounds.northeast.longitude | number:4 }}</td>
                     </tr>
                     <tr>
@@ -87,18 +87,20 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Event</th>
+                                <th>Venue</th>
                                 <th>Type</th>
                                 <th>Price</th>
                                 <th>Transport</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="row in rowCollectionLeave">
-                                <td>{{row.name}}</td>
-                                <td>{{row.section}}</td>
-                                <td>{{row.price}}</td>
-                                <td>{{row.transportInfo}}</td>
+                            <tr ng-repeat="row in rowCollection">
+                                <td>{{row.value.name}}</td>
+                                <td>{{row.value.venue}}</td>
+                                <td>{{row.value.type}}</td>
+                                <td>{{row.value.price}}</td>
+                                <td>{{row.value.transport}}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary" ng-click="selectRow(row)" type="button">Choose</button>
                                 </td>
