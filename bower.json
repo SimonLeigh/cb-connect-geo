@@ -1,12 +1,17 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
+  "name": "cb-connect-geo",
+  "description": "Geospatial Querying Demonstration with Couchbase, Express, Angular.js and node.js",
   "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
+  "homepage": "https://github.com/SimonLeigh/cb-connect-geo",
   "license": "MIT",
   "private": true,
+  "directory": "public/bower_components/",
+  "dev_dependencies": {
+    "lodash": "latest"
+  },
   "dependencies": {
     "angular": "latest",
+    "angular-google-maps": "latest",
     "html5-boilerplate": "~4.3.0"
   }
 }
