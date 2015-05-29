@@ -1,5 +1,9 @@
 /* app css stylesheet */
 
+.sel-width {
+  height: 20px;
+  width: 54px;
+}
 .angular-google-map-container {
   height: 400px;
 }

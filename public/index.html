@@ -2,30 +2,33 @@
 <html xmlns:ng="http://angularjs.org" id='ng-app' ng-app="myApp">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>My AngularJS App</title>
+    <title>Couchbase 4.0 GeoSpatial Demo</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- Bootstrap CSS and bootstrap datepicker CSS used for styling the demo pages-->
+    <link rel="stylesheet" href="css/datepicker.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,600,300,700'
           rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="/css/app.css">
     <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body ng-controller="myAppCtrl">
-<!--
-<ul class="menu">
-  <li><a href="#/view1">view1</a></li>
-  <li><a href="#/view2">view2</a></li>
-</ul>
--->
+
 <div class="container" id="containerElem">
 
     <div class="row">
         <div class="page-title">
             <h2>GeoSpatial Querying with Couchbase Server 4.0</h2>
+            <div class="panel-header panel-primary"><small> © 2015 Couchbase.com  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Powered
+                by:&nbsp;&nbsp;&nbsp;</small> <img src="/images/logoCouchbase.png"/>&nbsp;&nbsp;&nbsp;&nbsp;<img
+                    src="/images/logoNode.png"/>&nbsp;&nbsp;&nbsp;&nbsp;<img
+                    src="/images/logoExpress.png"/>&nbsp;&nbsp;&nbsp;
+                &nbsp;<img src="/images/angular.png"/>
+            </div>
         </div>
         <button class="btn btn-danger" ng-click="removeMarkers()">Clear Map</button>
         <button class="btn btn-success" ng-click="refreshMap()">Refresh Map</button>
@@ -87,10 +90,46 @@
                         <td>dragging</td>
                         <td ng-cloak>{{ map.dragging }}</td>
                     </tr>
+                    <tr>
+                        <form class="form-horizontal" role="form" name="dateForm" ng-submit="findEventsWithDate()" novalidate>
+                            <div class="form-group" ng-class="{ 'has-error' : dateForm.start.$invalid && !dateForm.start.$pristine}">
+                                <div class="input-daterange" id="datepicker">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Start</span>
+                                        <input type="text" class="input-small form-control ng-dirty ng-valid" id="startDate" name="start"
+                                               ng-model="start" placeholder="enter start date" />
+                                        <span class="input-group-addon" id="endSpan">End</span>
+                                        <input type="text" class="input-small form-control ng-dirty ng-valid" id="endDate" name="end"
+                                               ng-model="end" placeholder="enter end date"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </tr>
                     </tbody>
                 </table>
             </fieldset>
         </div>
+        <!--<div class="col-md-4">
+            <form class="form-horizontal" role="form" name="dateForm" ng-submit="findEventsByDate()" novalidate>
+                <div class="form-group" ng-class="{ 'has-error' : dateForm.start.$invalid && !dateForm.start.$pristine}">
+                    <label class="col-sm-3 control-label">Event Dates</label>
+                    <div class="col-md-4">
+                        <div class="input-daterange" id="datepicker">
+                            <div class="input-group">
+                                <span class="input-group-addon">Start</span>
+                                <input type="text" class="input-small form-control" name="start"
+                                       ng-model="start" placeholder="enter a start date" />
+                                <span class="input-group-addon" id="endSpan">End</span>
+                                <input type="text" class="input-small form-control" id="endDate" name="end"
+                                       ng-model="end" placeholder="enter an end date"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>-->
+
         <div class="row">
             <div class="col-md-8">
                 <div class="panel panel-primary" id="event-table" ng-show="!empty">
@@ -141,6 +180,12 @@
 <script src="components/version/version.js"></script>
 <script src="components/version/version-directive.js"></script>
 <script src="components/version/interpolate-filter.js"></script>
+<script src="components/jquery/jquery.min.js"></script>
+<script src="components/bootstrap/bootstrap.min.js"></script>
+<script src="components/bootstrap/bootstrap-datepicker.js"></script>
+<script src="components/bootstrap/bootstrap-switch.min.js"></script>
+<script src="components/bootstrap/ui-bootstrap.min.js"></script>
+<script src="components/bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="app.js"></script>
 
 </body>

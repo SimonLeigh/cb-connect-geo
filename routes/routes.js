@@ -83,6 +83,33 @@ module.exports = function (app) {
         }
     });
 
+    //// ▶▶ Event Spatial Query With Date ◀◀ ////
+    app.get('/api/events/findEventsWithDate',function(req,res) {
+        if (req.query.ne_lat && req.query.ne_lon &&
+            req.query.sw_lat && req.query.sw_lon &&
+            req.query.start && req.query.end) {
+            // Construct the array expected by the spatial query
+            var coords = [req.query.sw_lon, req.query.sw_lat,
+                req.query.ne_lon, req.query.ne_lat];
+
+            var dates = [req.query.start, req.query.end];
+
+            db.spatialQueryWithDates(coords, dates, function (err, done) {
+                if (err) {
+                    res.status = 400;
+                    res.send(err);
+                    return;
+                }
+                res.status = 202;
+                res.send(done);
+            });
+        }else{
+            res.status = 400;
+            res.send({"Events":"bad request"});
+            return;
+        }
+    });
+
 
 
 

@@ -14,7 +14,7 @@
     "dataMemQuota":1024
   },
   "application":{
-    "httpPort":3000,
+    "httpPort":3001,
     "dataSource":"embedded",
     "wait":3000,
     "checkInterval":1000,

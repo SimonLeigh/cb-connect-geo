@@ -167,7 +167,56 @@ function spatialQuery(coordinates, done){
     }
     else {
         // Set the query with BBOX coordinates and limit of 30 results for testing
-        sQuery.bbox(coordinates).limit(100);
+        sQuery.bbox(coordinates).limit(500);
+        db.query(sQuery,function(err,result){
+            if (err) {
+                console.log("ERR:",err);
+                done(err,null);
+                return;
+            }
+            done(null,result);
+            console.log(result);
+            return;
+        });
+    }
+}
+
+/*********
+ * @param done
+ * @param coordinates
+ * Coordinates in 4-array
+ * @param dates
+ * Date range in 2-array
+ *
+***********/
+function spatialQueryWithDates(coordinates,dates, done){
+
+    // Set the query up to query the view with (designdoc, viewname)
+    var sQuery = couchbase.SpatialQuery.from("byLoc","byLatLonDate");
+    if(config.couchbase.showQuery){
+        console.log("SPATIAL QUERY COORDS:", coordinates);
+        console.log("SPATIAL QUERY DATES:", dates);
+    }
+    // Set the bounding box on the query to be the coordinates fed in.
+    // The coords needs to be array of size 4 with the following layout:
+    // (SW_LON, SW_LAT, NE_LON, NE_LAT)
+    // NOTICE WE INVERT THE TEST HERE TO RETURN IF ERR
+    if( !( coordinates.length == 4 &&
+        parseFloat(coordinates[0]) < parseFloat(coordinates[2]) &&
+        parseFloat(coordinates[1]) < parseFloat(coordinates[3]))){
+        console.log("ERROR:","Invalid Bounding Box Coordinates Given");
+        done(new Error("Invalid Bounding Box Coordinates Given"),null);
+        return;
+    }
+    else {
+
+        //TODO: HANDLE OPEN RANGE (TEST NULLS ETC, CONVERT DATE FORMAT WHEN IT GETS HERE)
+        // Create start array by slicing coordinates and pushing first date on
+        var start = coordinates.slice(0,1).push(dates[0]);
+        // Create end array the same way
+        var end = coordinates.slice(2,3).push(dates[1]);
+        // Set the query with BBOX coordinates and limit of 30 results for testing
+        sQuery.range(start.toString(),end.toString(),true).limit(500);
         db.query(sQuery,function(err,result){
             if (err) {
                 console.log("ERR:",err);

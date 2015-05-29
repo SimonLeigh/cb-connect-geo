@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('myApp', ['uiGmapgoogle-maps'])
+angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
     .config(['uiGmapGoogleMapApiProvider'
         , function(GoogleMapApi) {
             GoogleMapApi.configure({
@@ -9,7 +9,8 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
                 v: '3.17',
                 libraries: 'weather,geometry,visualization'
             });
-        }])
+        }
+    ])
 
     .controller('controlController', function ($scope) {
         $scope.controlText = 'I\'m a custom control';
@@ -53,6 +54,37 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
                                 ne_lon: $scope.map.bounds.northeast.longitude,
                                 sw_lat: $scope.map.bounds.southwest.latitude,
                                 sw_lon: $scope.map.bounds.southwest.longitude
+                            }
+                        }).then(function (response) {
+                            var markers = [];
+                            if (response.data.length > 0) {
+                                $scope.empty = false;
+                            }
+                            for (var j = 0; j < response.data.length; j++) {
+                                $scope.rowCollection.push(response.data[j]);
+                                markers.push(
+                                    createMarkerFromRow(response.data[j],j)
+                                );
+                            }
+                            if (!$scope.empty) {
+                                $scope.map.eventMarkers = markers;
+                            }
+                        });
+                    }
+                };
+
+                $scope.findEventsWithDate=function() {
+                    if ($scope.map.bounds) {
+                        $scope.rowCollection = [];
+                        $scope.map.eventMarkers = [];
+                        return $http.get("/api/events/findEvents", {
+                            params: {
+                                ne_lat: $scope.map.bounds.northeast.latitude,
+                                ne_lon: $scope.map.bounds.northeast.longitude,
+                                sw_lat: $scope.map.bounds.southwest.latitude,
+                                sw_lon: $scope.map.bounds.southwest.longitude,
+                                start: $scope.dateForm.start,
+                                end: $scope.dateForm.end
                             }
                         }).then(function (response) {
                             var markers = [];
@@ -142,6 +174,12 @@ angular.module('myApp', ['uiGmapgoogle-maps'])
                     };
                 });
 
+
             });
 
-        }]);
+            //// ▶▶ Jquery inside Angular ◀◀ ////
+            $('.input-daterange').datepicker({"todayHighlight": true, "autoclose":true,"startDate":"+0d"});
+
+        }
+    ]);
+
