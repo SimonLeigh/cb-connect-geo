@@ -189,7 +189,7 @@ function spatialQuery(coordinates, done){
  * Date range in 2-array
  *
 ***********/
-function spatialQueryWithDates(coordinates,dates, done){
+function spatialQueryWithDates(coordinates, dates, done){
 
     // Set the query up to query the view with (designdoc, viewname)
     var sQuery = couchbase.SpatialQuery.from("byLoc","byLatLonDate");
@@ -212,11 +212,11 @@ function spatialQueryWithDates(coordinates,dates, done){
 
         //TODO: HANDLE OPEN RANGE (TEST NULLS ETC, CONVERT DATE FORMAT WHEN IT GETS HERE)
         // Create start array by slicing coordinates and pushing first date on
-        var start = coordinates.slice(0,1).push(dates[0]);
-        // Create end array the same way
-        var end = coordinates.slice(2,3).push(dates[1]);
+        coordinates.push(Date.parse(dates[0])/1000);
+        coordinates.push(Date.parse(dates[1])/1000);
+        console.log(coordinates.toString());
         // Set the query with BBOX coordinates and limit of 30 results for testing
-        sQuery.range(start.toString(),end.toString(),true).limit(500);
+        sQuery.bbox(coordinates).limit(500);
         db.query(sQuery,function(err,result){
             if (err) {
                 console.log("ERR:",err);
@@ -260,6 +260,7 @@ module.exports.bucket=bucket;
 module.exports.init=init;
 module.exports.query=query;
 module.exports.spatialQuery = spatialQuery;
+module.exports.spatialQueryWithDates = spatialQueryWithDates;
 module.exports.ops=ops;
 module.exports.read=read;
 module.exports.upsert=upsert;

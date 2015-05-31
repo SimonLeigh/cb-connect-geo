@@ -12,14 +12,6 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
         }
     ])
 
-    .controller('controlController', function ($scope) {
-        $scope.controlText = 'I\'m a custom control';
-        $scope.danger = false;
-        $scope.controlClick = function () {
-            $scope.danger = !$scope.danger;
-            alert('custom control clicked!')
-        };
-    })
 
     .controller("myAppCtrl", ['$scope','$timeout','$http','uiGmapGoogleMapApi'
         , function($scope, $timeout, $http, GoogleMapApi) {
@@ -77,14 +69,14 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                     if ($scope.map.bounds) {
                         $scope.rowCollection = [];
                         $scope.map.eventMarkers = [];
-                        return $http.get("/api/events/findEvents", {
+                        return $http.get("/api/events/findEventsWithDate", {
                             params: {
                                 ne_lat: $scope.map.bounds.northeast.latitude,
                                 ne_lon: $scope.map.bounds.northeast.longitude,
                                 sw_lat: $scope.map.bounds.southwest.latitude,
                                 sw_lon: $scope.map.bounds.southwest.longitude,
-                                start: $scope.dateForm.start,
-                                end: $scope.dateForm.end
+                                start: $scope.dt,
+                                end: $scope.enddt
                             }
                         }).then(function (response) {
                             var markers = [];
@@ -174,6 +166,80 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                     };
                 });
 
+                $scope.today = function () {
+                    $scope.dt = new Date();
+                    $scope.enddt = new Date();
+                };
+                $scope.today();
+
+                $scope.clear = function () {
+                    $scope.dt = null;
+                    $scope.enddt = null;
+
+                };
+
+                // Disable weekend selection
+                $scope.disabled = function (date, mode) {
+                    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+                };
+
+                $scope.toggleMin = function () {
+                    $scope.minDate = $scope.minDate ? null : new Date();
+                };
+                $scope.toggleMin();
+
+                $scope.open = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    $scope.opened = true;
+                };
+
+                $scope.open1 = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    $scope.opened1 = true;
+                };
+                $scope.dateOptions = {
+                    formatYear: 'yy',
+                    startingDay: 1
+                };
+
+                $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+                $scope.format = $scope.formats[0];
+
+                var tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                var afterTomorrow = new Date();
+                afterTomorrow.setDate(tomorrow.getDate() + 2);
+                $scope.events =
+                    [
+                        {
+                            date: tomorrow,
+                            status: 'full'
+                        },
+                        {
+                            date: afterTomorrow,
+                            status: 'partially'
+                        }
+                    ];
+
+                $scope.getDayClass = function (date, mode) {
+                    if (mode === 'day') {
+                        var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
+
+                        for (var i = 0; i < $scope.events.length; i++) {
+                            var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
+
+                            if (dayToCheck === currentDay) {
+                                return $scope.events[i].status;
+                            }
+                        }
+                    }
+
+                    return '';
+                };
 
             });
 

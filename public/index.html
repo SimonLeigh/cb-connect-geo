@@ -32,7 +32,7 @@
         </div>
         <button class="btn btn-danger" ng-click="removeMarkers()">Clear Map</button>
         <button class="btn btn-success" ng-click="refreshMap()">Refresh Map</button>
-        <button class="btn btn-success" ng-click="findEvents()">Get Events</button>
+        <button class="btn btn-success" ng-click="findEventsWithDate()">Get Events</button>
         Show Map: <input type="checkbox" text="Show / Hide Map" ng-model="map.show">
     </div>
 
@@ -62,6 +62,20 @@
             </ui-gmap-markers>
 
         </ui-gmap-google-map>
+        <div class="col-md-4" id="datepickers">
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="$parent.dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                </p>
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="$parent.enddt" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                </p>
+        </div>
         <div class="col-md-4" id="statsElem">
             <fieldset>
                 <table class="table">
@@ -89,22 +103,6 @@
                     <tr>
                         <td>dragging</td>
                         <td ng-cloak>{{ map.dragging }}</td>
-                    </tr>
-                    <tr>
-                        <form class="form-horizontal" role="form" name="dateForm" ng-submit="findEventsWithDate()" novalidate>
-                            <div class="form-group" ng-class="{ 'has-error' : dateForm.start.$invalid && !dateForm.start.$pristine}">
-                                <div class="input-daterange" id="datepicker">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Start</span>
-                                        <input type="text" class="input-small form-control ng-dirty ng-valid" id="startDate" name="start"
-                                               ng-model="start" placeholder="enter start date" />
-                                        <span class="input-group-addon" id="endSpan">End</span>
-                                        <input type="text" class="input-small form-control ng-dirty ng-valid" id="endDate" name="end"
-                                               ng-model="end" placeholder="enter end date"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                     </tr>
                     </tbody>
                 </table>
