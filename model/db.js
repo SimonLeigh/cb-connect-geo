@@ -212,11 +212,18 @@ function spatialQueryWithDates(coordinates, dates, done){
 
         //TODO: HANDLE OPEN RANGE (TEST NULLS ETC, CONVERT DATE FORMAT WHEN IT GETS HERE)
         // Create start array by slicing coordinates and pushing first date on
-        coordinates.push(Date.parse(dates[0])/1000);
-        coordinates.push(Date.parse(dates[1])/1000);
         console.log(coordinates.toString());
+        var s_range = coordinates.slice(0,2);
+        var e_range = coordinates.slice(2,4);
+
+        s_range.push(dates[0]);
+        e_range.push(dates[1]);
+
+        var query_params = {start_range: "[" + s_range.toString() + "]", end_range: "[" + e_range.toString() + "]"};
+
+        console.log("Query params: " + JSON.stringify(query_params) );
         // Set the query with BBOX coordinates and limit of 30 results for testing
-        sQuery.bbox(coordinates).limit(500);
+        sQuery.custom(query_params).limit(500);
         db.query(sQuery,function(err,result){
             if (err) {
                 console.log("ERR:",err);

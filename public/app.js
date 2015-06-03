@@ -11,6 +11,11 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
             });
         }
     ])
+    .config(function($httpProvider) {
+        //Enable cross domain calls
+        $httpProvider.defaults.useXDomain = true;
+    })
+
 
 
     .controller("myAppCtrl", ['$scope','$timeout','$http','uiGmapGoogleMapApi'
@@ -49,13 +54,14 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                             }
                         }).then(function (response) {
                             var markers = [];
+                            console.log(response);
                             if (response.data.length > 0) {
                                 $scope.empty = false;
                             }
                             for (var j = 0; j < response.data.length; j++) {
                                 $scope.rowCollection.push(response.data[j]);
                                 markers.push(
-                                    createMarkerFromRow(response.data[j],j)
+                                    createMarkerFromRow(response.data[j], j)
                                 );
                             }
                             if (!$scope.empty) {
@@ -75,11 +81,12 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                                 ne_lon: $scope.map.bounds.northeast.longitude,
                                 sw_lat: $scope.map.bounds.southwest.latitude,
                                 sw_lon: $scope.map.bounds.southwest.longitude,
-                                start: $scope.dt,
-                                end: $scope.enddt
+                                start: Date.parse($scope.dt)/1000,
+                                end: Date.parse($scope.enddt)/1000
                             }
                         }).then(function (response) {
                             var markers = [];
+                            console.log(response);
                             if (response.data.length > 0) {
                                 $scope.empty = false;
                             }
@@ -96,16 +103,66 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                     }
                 };
 
+/*                $scope.findEventsWithDate=function() {
+                    if ($scope.map.bounds) {
+                        $scope.rowCollection = [];
+                        $scope.map.eventMarkers = [];
+
+                        var s_range = [];
+                        var e_range = [];
+
+                        // Create our start and end ranges
+                        s_range.push($scope.map.bounds.southwest.longitude);
+                        s_range.push($scope.map.bounds.southwest.latitude);
+                        s_range.push(Date.parse($scope.dt)/1000);
+
+                        e_range.push($scope.map.bounds.northeast.longitude);
+                        e_range.push($scope.map.bounds.northeast.latitude);
+                        e_range.push(Date.parse($scope.enddt)/1000);
+
+
+                        return $http.get("http://192.168.109.101:8092/CouchPlaces/_design/byLoc/_spatial/byLatLonDate", {
+                            params: {
+                                start_range: "[" + s_range.toString() + "]",
+                                end_range: "[" + e_range.toString() + "]",
+                                stale: false,
+                                connect_timeout: 60000,
+                                limit: 500,
+                                skip: 0},
+                            headers: {
+                                'Content-Type': 'application/json; charset=utf-8'
+                                                       }
+                        }).success(function (res) {
+                            console.log(res);
+                            var markers = [];
+                            if (res.rows.length > 0) {
+                                $scope.empty = false;
+                            }
+                            for (var j = 0; j < res.rows.length; j++) {
+                                $scope.rowCollection.push(res.rows[j]);
+                                markers.push(
+                                    createMarkerFromRow(res.rows[j],j)
+                                );
+                            }
+                            if (!$scope.empty) {
+                                $scope.map.eventMarkers = markers;
+                            }
+                        });
+                    }
+                };*/
+
                 var createMarkerFromRow = function (row, j) {
 
                     // Extract location from key
                     var latitude = row.key[1][0];
                     var longitude = row.key[0][0];
                     var ret = {
+                        icon: 'images/couchbase-circle-symbol.png',
                         latitude: latitude,
                         longitude: longitude,
                         title: row.value.name,
-                        id: row.id,
+                        // We add on j here, to ensure unique ids for markers
+                        id: row.id + j,
                         data: row
                     };
                     console.log(ret);
@@ -115,7 +172,7 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                 var onMarkerClicked = function (marker) {
                     marker.showWindow = true;
                     $scope.$apply();
-                    //window.alert("Marker: lat: " + marker.latitude + ", lon: " + marker.longitude + " clicked!!")
+                    window.alert("Marker: lat: " + marker.latitude + ", lon: " + marker.longitude + " clicked!!")
                 };
 
                 $scope.removeMarkers = function () {
