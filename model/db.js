@@ -175,7 +175,7 @@ function spatialQuery(coordinates, done){
                 return;
             }
             done(null,result);
-            console.log(result);
+            console.log("Results from query: " + result.length);
             return;
         });
     }
@@ -221,7 +221,7 @@ function spatialQueryWithDates(coordinates, dates, done){
 
         var query_params = {start_range: "[" + s_range.toString() + "]", end_range: "[" + e_range.toString() + "]"};
 
-        console.log("Query params: " + JSON.stringify(query_params) );
+        console.log("QUERY CUSTOM PARAMS: " + JSON.stringify(query_params) );
         // Set the query with BBOX coordinates and limit of 30 results for testing
         sQuery.custom(query_params).limit(500);
         db.query(sQuery,function(err,result){
@@ -231,7 +231,7 @@ function spatialQueryWithDates(coordinates, dates, done){
                 return;
             }
             done(null,result);
-            console.log(result);
+            console.log("Results from query: " + result.length);
             return;
         });
     }
