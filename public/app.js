@@ -82,14 +82,29 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                     if ($scope.map.bounds) {
                         $scope.rowCollection = [];
                         $scope.map.eventMarkers = [];
+
+                        var s_date;
+                        var e_date;
+                        if ($scope.dt == null || $scope.dt == undefined){
+                            s_date = "null";
+                        } else{
+                            s_date = Date.parse($scope.dt)/1000
+                        };
+
+                        if ($scope.enddt == null || $scope.enddt == undefined){
+                            e_date = "null";
+                        } else{
+                            e_date = Date.parse($scope.enddt)/1000
+                        };
+
                         return $http.get("/api/events/findEventsWithDate", {
                             params: {
                                 ne_lat: $scope.map.bounds.northeast.latitude,
                                 ne_lon: $scope.map.bounds.northeast.longitude,
                                 sw_lat: $scope.map.bounds.southwest.latitude,
                                 sw_lon: $scope.map.bounds.southwest.longitude,
-                                start: Date.parse($scope.dt)/1000,
-                                end: Date.parse($scope.enddt)/1000
+                                start: s_date,
+                                end: e_date
                             }
                         }).then(function (response) {
                             var markers = [];
@@ -202,7 +217,7 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                             streetViewControl: false,
                             panControl: false,
                             maxZoom: 20,
-                            minZoom: 3
+                            minZoom: 2
                         },
                         zoom: 3,
                         dragging: false,
