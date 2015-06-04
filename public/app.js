@@ -34,6 +34,13 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                     $scope.map.control.refresh({latitude: 51.5227, longitude: -0.0845});
                     $scope.map.control.getGMap().setZoom(16);
 
+                }
+
+                $scope.refreshMapCA = function () {
+                    //optional param if you want to refresh you can pass null undefined or false or empty arg
+                    $scope.map.control.refresh({latitude: 37.4034, longitude: -121.9696});
+                    $scope.map.control.getGMap().setZoom(17);
+
                 };
 
                 $scope.getMapInstance = function () {
