@@ -223,7 +223,7 @@ function spatialQueryWithDates(coordinates, dates, done){
 
         console.log("QUERY CUSTOM PARAMS: " + JSON.stringify(query_params) );
         // Set the query with BBOX coordinates and limit of 30 results for testing
-        sQuery.custom(query_params).limit(500);
+        sQuery.custom(query_params).limit(500).stale(couchbase.SpatialQuery.Update.BEFORE);
         db.query(sQuery,function(err,result){
             if (err) {
                 console.log("ERR:",err);

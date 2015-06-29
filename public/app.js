@@ -83,18 +83,25 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                         $scope.rowCollection = [];
                         $scope.map.eventMarkers = [];
 
+                        // Here we check if we have an undefined date, which is OK.
                         var s_date;
                         var e_date;
+
                         if ($scope.dt == null || $scope.dt == undefined){
                             s_date = "null";
                         } else{
-                            s_date = Date.parse($scope.dt)/1000
+                            // setHours for start to midnight (morning) on start range
+                            var t_date = $scope.dt.setHours(0,0,0,0);
+                            console.log(t_date);
+                            s_date = t_date;
                         };
 
                         if ($scope.enddt == null || $scope.enddt == undefined){
                             e_date = "null";
                         } else{
-                            e_date = Date.parse($scope.enddt)/1000
+                            // setHours for end to almost midnight (evening) of end range.
+                            var te_date = $scope.enddt.setHours(23,59,0,0);
+                            e_date = te_date
                         };
 
                         return $http.get("/api/events/findEventsWithDate", {
@@ -217,7 +224,7 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                             streetViewControl: false,
                             panControl: false,
                             maxZoom: 20,
-                            minZoom: 2
+                            minZoom: 3
                         },
                         zoom: 3,
                         dragging: false,
@@ -258,9 +265,11 @@ angular.module('myApp', ['uiGmapgoogle-maps','ui.bootstrap'])
                 };
 
                 // Disable weekend selection
+                /*
                 $scope.disabled = function (date, mode) {
                     return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
                 };
+                */
 
                 $scope.toggleMin = function () {
                     $scope.minDate = $scope.minDate ? null : new Date();
